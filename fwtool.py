@@ -417,5 +417,32 @@ def replace_rootfs(infile, outfile, rootfs_file):
 	root_part.replace_data_chunk(data_source.to_chunk())
 	fw.write_to_file(outfile)
 
+@cli.command(help='Extract arbitrary partition from firmware update image')
+@click.argument('infile')
+@click.argument('outfile')
+@click.argument('partition_index', type=int) #, help='Index of partition to extract (0-based)')
+def extract_partition(infile, outfile, partition_index):
+	fw = FwFile.from_file(infile)
+	parts = list(fw.get_partitions())
+	if partition_index < 0 or partition_index >= len(parts):
+		print(f'Invalid parition index, must be >= 0, < {len(parts)}')
+		return
+	parts[partition_index].dump_to_file(outfile)
+
+@cli.command(help='Replace arbitrary partition in firmware update image')
+@click.argument('infile')
+@click.argument('outfile')
+@click.argument('partition_index', type=int) #, help='Index of partition to extract (0-based)')
+@click.argument('partition_file')
+def replace_partition(infile, outfile, partition_index, partition_file):
+	fw = FwFile.from_file(infile)
+	parts = list(fw.get_partitions())
+	if partition_index < 0 or partition_index >= len(parts):
+		print(f'Invalid parition index, must be >= 0, < {len(parts)}')
+		return
+	data_source = FileDataSource(partition_file)
+	parts[partition_index].replace_data_chunk(data_source.to_chunk())
+	fw.write_to_file(outfile)
+
 if __name__ == '__main__':
 	cli()
