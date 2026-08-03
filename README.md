@@ -25,3 +25,7 @@ Commands:
   info            Show header and partition information for a firmware...
   replace-rootfs  Replace rootfs within firmware update image, rootfs...
 ```
+
+## Attributions
+
+Inspired by [MPC-LiveXplore](https://github.com/TheKikGen/MPC-LiveXplore)
