@@ -346,11 +346,11 @@ class FwFile:
 
 		return None
 
-@click.group()
+@click.group(help='Tool to inspect and modify AKAI Linux firmware update images')
 def cli():
 	pass
 
-@cli.command()
+@cli.command(help='Show header and partition information for a firmware update file')
 @click.argument('infile')
 def info(infile):
 	fw = FwFile.from_file(infile)
@@ -380,13 +380,13 @@ def info(infile):
 	if footer is None:
 		print('WARNING: No firmware EOF marker found, format incompatible or corrupted')
 
-@cli.command()
+@cli.command(help='Self-test command, fully parses, destructures and reassembles a firmware image. Output should be binary identical to input')
 @click.argument('infile')
 @click.argument('outfile')
 def copy(infile, outfile):
 	FwFile.from_file(infile).write_to_file(outfile)
 
-@cli.command()
+@cli.command(help='Extract rootfs from firmware update image')
 @click.argument('infile')
 @click.argument('outfile')
 def extract_rootfs(infile, outfile):
@@ -400,7 +400,7 @@ def extract_rootfs(infile, outfile):
 		return
 	root_part.dump_to_file(outfile)
 
-@cli.command()
+@cli.command(help='Replace rootfs within firmware update image, rootfs must be correctly compressed already!')
 @click.argument('infile')
 @click.argument('outfile')
 @click.argument('rootfs_file')
